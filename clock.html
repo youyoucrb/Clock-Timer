@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>وَلَمْ أَكُنْ بِدُعَائِكَ رَبِّ شَقِيًّا</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif; /* Closely resembles San Francisco */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #e0f7fa; /* Sky blue */
+      text-align: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #0288d1;
+      direction: rtl; /* Right-to-left for Arabic text */
+    }
+
+    .clock, .timer-screen {
+      font-size: 2.5rem;
+      color: black;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .clock {
+      display: block;
+    }
+
+    .form-container {
+      margin: 20px 0;
+    }
+
+    .form-container input {
+      width: 50px;
+      padding: 5px;
+      margin: 5px;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      color: white;
+      background-color: #0288d1; /* Dark sky blue */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #01579b; /* Even darker blue */
+    }
+
+    .back-button {
+      margin-top: 20px;
+      background-color: gray;
+    }
+
+    .back-button:hover {
+      background-color: #4a4a4a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>وَلَمْ أَكُنْ بِدُعَائِكَ رَبِّ شَقِيًّا</h1>
+
+    <!-- Clock -->
+    <div class="clock" id="clock"></div>
+
+    <!-- Timer -->
+    <div class="timer-screen" id="timer-screen">
+      <span id="timer">00:00:00</span>
+      <button class="back-button" onclick="goBackToClock()">Back to Clock</button>
+    </div>
+
+    <!-- Timer Input Form -->
+    <div class="form-container" id="timer-form">
+      <label for="hours">Hours:</label>
+      <input type="number" id="hours" min="0" max="23" placeholder="00">
+      <label for="minutes">Minutes:</label>
+      <input type="number" id="minutes" min="0" max="59" placeholder="00">
+      <label for="seconds">Seconds:</label>
+      <input type="number" id="seconds" min="0" max="59" placeholder="00">
+      <br>
+      <button onclick="startTimer()">Start Timer</button>
+    </div>
+  </div>
+
+  <script>
+    // Clock Functionality
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock, 1000);
+
+    // Timer Functionality
+    let timerInterval;
+    function startTimer() {
+      clearInterval(timerInterval);
+      const hoursInput = parseInt(document.getElementById('hours').value) || 0;
+      const minutesInput = parseInt(document.getElementById('minutes').value) || 0;
+      const secondsInput = parseInt(document.getElementById('seconds').value) || 0;
+      let totalTime = hoursInput * 3600 + minutesInput * 60 + secondsInput;
+
+      // Switch to timer screen
+      document.getElementById('clock').style.display = 'none';
+      document.getElementById('timer-screen').style.display = 'block';
+      document.getElementById('timer-form').style.display = 'none';
+
+      const timerDisplay = document.getElementById('timer');
+      timerInterval = setInterval(() => {
+        const hours = String(Math.floor(totalTime / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((totalTime % 3600) / 60)).padStart(2, '0');
+        const seconds = String(totalTime % 60).padStart(2, '0');
+        timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+
+        if (totalTime === 0) {
+          clearInterval(timerInterval);
+          alert('Time is up!');
+          goBackToClock();
+        } else {
+          totalTime--;
+        }
+      }, 1000);
+    }
+
+    function goBackToClock() {
+      clearInterval(timerInterval);
+      document.getElementById('clock').style.display = 'block';
+      document.getElementById('timer-screen').style.display = 'none';
+      document.getElementById('timer-form').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
+
